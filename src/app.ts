@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import routes from "./routes";
 import { errorHandler } from "./middleware/errorHandler";
 import { sequelize } from "./db";
+import ProductRoutes from "./routes/product.routes";
 
 dotenv.config();
 
@@ -55,5 +56,7 @@ const startServer = async () => {
 };
 
 startServer();
+
+app.use("/products", ProductRoutes);
 
 export default app;
