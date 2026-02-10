@@ -3,7 +3,6 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import dotenv from "dotenv";
-import routes from "./routes";
 import { errorHandler } from "./middleware/errorHandler";
 import { sequelize } from "./db";
 import ProductRoutes from "./routes/product.routes";
@@ -18,9 +17,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-// Routes
-app.use("/api", routes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {

@@ -9,6 +9,21 @@ interface CreateProductData {
   discount?: number;
 }
 
+export async function getProductsService(page: number, limit: number) {
+  try {
+    const offset = (page - 1) * limit;
+
+    const products = await Products.findAll({
+      offset,
+      limit,
+    });
+    return products;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    throw error;
+  }
+}
+
 export async function createProductService(data: CreateProductData) {
   try {
     const { name, price, description, weight, quantity, discount } = data;
