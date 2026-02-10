@@ -5,8 +5,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { errorHandler } from "./middleware/errorHandler";
 import { sequelize } from "./db";
-import ProductRoutes from "./routes/product.routes";
-
+import productRoutes from "./routes/product.routes";
+import authRoutes from "./routes/auth.routes";
+import authGuard from "./guards/authGuard";
 dotenv.config();
 
 const app: Express = express();
@@ -53,6 +54,7 @@ const startServer = async () => {
 
 startServer();
 
-app.use("/products", ProductRoutes);
+app.use("/products", authGuard, productRoutes);
+app.use("/auth", authRoutes);
 
 export default app;
