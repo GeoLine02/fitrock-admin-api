@@ -24,6 +24,21 @@ export async function getProductsService(page: number, limit: number) {
   }
 }
 
+export async function getProductByIdService(id: number) {
+  try {
+    const product = await Products.findByPk(id);
+
+    if (!product) {
+      throw new Error("PRODUCT_NOT_FOUND");
+    }
+
+    return product;
+  } catch (error) {
+    console.error("Error fetching product by ID:", error);
+    throw error;
+  }
+}
+
 export async function createProductService(data: CreateProductData) {
   try {
     const { name, price, description, weight, quantity, discount } = data;
