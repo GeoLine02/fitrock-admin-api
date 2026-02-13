@@ -8,40 +8,57 @@ import { sequelize } from "./db";
 import productRoutes from "./routes/product.routes";
 import authRoutes from "./routes/auth.routes";
 import authGuard from "./guards/authGuard";
+
 dotenv.config();
 
 const app: Express = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4001; // Make sure this matches frontend
 
+// =====================
 // Middleware
-app.use(cors());
+// =====================
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  }),
+);
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// 404 handler
+// =====================
+// Routes
+// =====================
+app.use("/auth", authRoutes);
+app.use("/products", authGuard, productRoutes);
+
+// =====================
+// 404 Handler (must come after routes)
+// =====================
 app.use((req: Request, res: Response) => {
-  res.status(404).json({
-    success: false,
-    message: "Route not found",
-  });
+  res.status(404).json({ message: "Route not found" });
 });
 
-// Error handling middleware (must be last)
+// =====================
+// Error Handler (MUST BE LAST)
+// =====================
 app.use(errorHandler);
 
-// Database initialization and server startup
+// =====================
+// Start Server
+// =====================
 const startServer = async () => {
   try {
-    // Test database connection
     await sequelize.authenticate();
     console.log("✓ Database connection established");
 
-    // Sync models with database
-    await sequelize.sync({ alter: process.env.NODE_ENV === "development" });
+    await sequelize.sync({
+      alter: process.env.NODE_ENV === "development",
+    });
     console.log("✓ Database models synchronized");
 
-    // Start server
     app.listen(PORT, () => {
       console.log(`✓ Server running on port ${PORT}`);
       console.log(`✓ Environment: ${process.env.NODE_ENV || "development"}`);
@@ -53,8 +70,5 @@ const startServer = async () => {
 };
 
 startServer();
-
-app.use("/products", authGuard, productRoutes);
-app.use("/auth", authRoutes);
 
 export default app;
