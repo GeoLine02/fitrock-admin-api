@@ -8,6 +8,7 @@ import { sequelize } from "./db";
 import productRoutes from "./routes/product.routes";
 import authRoutes from "./routes/auth.routes";
 import authGuard from "./guards/authGuard";
+import userRoutes from "./routes/user.routes";
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use(cookieParser());
 // Routes
 // =====================
 app.use("/auth", authRoutes);
+app.use("/user", userRoutes);
 app.use("/products", authGuard, productRoutes);
 
 // =====================

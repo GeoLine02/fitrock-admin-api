@@ -1,16 +1,5 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { User } from "../types/user";
-
-declare global {
-  namespace Express {
-    interface Request {
-      userId?: {
-        id: number;
-      };
-    }
-  }
-}
 
 export const authGuard = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies.accessToken;
@@ -27,7 +16,7 @@ export const authGuard = (req: Request, res: Response, next: NextFunction) => {
 
   try {
     const payload = jwt.verify(token, secret) as { id: number };
-    req.userId = payload;
+    req.user = payload;
     return next();
   } catch (err) {
     return res.status(401).json({ message: "Unauthorized" });
