@@ -10,8 +10,9 @@ export async function getProductsController(req: Request, res: Response) {
     const page = parseInt(req.query.page as string) || 1;
     const limit = parseInt(req.query.limit as string) || 10;
 
-    const products = await getProductsService(page, limit);
-    res.status(200).json(products);
+    const { products, totalRows } = await getProductsService(page, limit);
+
+    res.status(200).json({ products, totalRows });
   } catch (error) {
     console.error("Error in getProductsController:", error);
     res.status(500).json({ error: "Internal Server Error" });
