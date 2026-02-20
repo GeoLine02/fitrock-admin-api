@@ -17,7 +17,9 @@ export async function getProductsService(page: number, limit: number) {
       offset,
       limit,
     });
-    return products;
+
+    const productsCount = await Products.count();
+    return { products: products, totalRows: productsCount };
   } catch (error) {
     console.error("Error fetching products:", error);
     throw error;
