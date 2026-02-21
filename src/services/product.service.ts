@@ -60,3 +60,36 @@ export async function createProductService(data: CreateProductData) {
     throw error;
   }
 }
+
+export async function updateProductService(
+  id: number,
+  data: CreateProductData,
+) {
+  try {
+    const { name, price, description, weight, quantity, discount } = data;
+    const product = await Products.findByPk(id);
+
+    if (!product) {
+      throw new Error("PRODUCT_NOT_FOUND");
+    }
+
+    const updatedProduct = await product.update(
+      {
+        product_description: description,
+        product_name: name,
+        product_price: price,
+        product_discount: discount,
+        product_quantity: quantity,
+        product_weight: weight,
+      },
+      {
+        where: { id },
+      },
+    );
+
+    return updatedProduct;
+  } catch (error) {
+    console.error("Error updating product:", error);
+    throw error;
+  }
+}
