@@ -3,6 +3,7 @@ import {
   createProductService,
   getProductByIdService,
   getProductsService,
+  updateProductService,
 } from "../services/product.service";
 
 export async function getProductsController(req: Request, res: Response) {
@@ -43,5 +44,21 @@ export async function createProductController(req: Request, res: Response) {
   } catch (error) {
     console.error("Error in createProductController:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function updateProductController(req: Request, res: Response) {
+  try {
+    const id = parseInt(req.params.id);
+    const data = req.body;
+    const updatedProduct = await updateProductService(id, data);
+    res.status(200).json(updatedProduct);
+  } catch (error: any) {
+    if (error.message === "PRODUCT_NOT_FOUND") {
+      res.status(404).json({ error: "Product not found" });
+    } else {
+      console.error("Error in updateProductController:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
   }
 }
