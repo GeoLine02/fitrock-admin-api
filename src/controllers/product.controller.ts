@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import {
   createProductService,
+  deleteProductService,
   getProductByIdService,
   getProductsService,
   updateProductService,
@@ -60,5 +61,22 @@ export async function updateProductController(req: Request, res: Response) {
       console.error("Error in updateProductController:", error);
       res.status(500).json({ error: "Internal Server Error" });
     }
+  }
+}
+
+export async function deleteProductController(req: Request, res: Response) {
+  try {
+    const id = parseInt(req.params.id);
+
+    const deletedProduct = await deleteProductService(id);
+    if (deletedProduct) {
+      res.status(200).json({ message: "Product deleted successfully" });
+    }
+  } catch (error: any) {
+    if (error.message === "PRODUCT_NOT_FOUND") {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 }

@@ -93,3 +93,22 @@ export async function updateProductService(
     throw error;
   }
 }
+
+export async function deleteProductService(id: number) {
+  try {
+    const product = await Products.findByPk(id);
+
+    if (!product) {
+      throw new Error("PRODUCT_NOT_FOUND");
+    }
+
+    const deletedProduct = await Products.destroy({
+      where: { id },
+    });
+
+    return deletedProduct;
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    throw error;
+  }
+}
