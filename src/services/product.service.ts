@@ -26,6 +26,16 @@ export async function getProductsService(page: number, limit: number) {
   }
 }
 
+export async function getProductsCountService() {
+  try {
+    const productsCount = await Products.count();
+    return productsCount;
+  } catch (error) {
+    console.error("Error fetching products count:", error);
+    throw error;
+  }
+}
+
 export async function getProductByIdService(id: number) {
   try {
     const product = await Products.findByPk(id);

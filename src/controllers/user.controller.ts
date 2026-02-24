@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getUserService } from "../services/user.service";
+import { getUsersCountService, getUserService } from "../services/user.service";
 
 export async function getUserController(req: Request, res: Response) {
   try {
@@ -24,6 +24,22 @@ export async function getUserController(req: Request, res: Response) {
       });
     }
 
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+    });
+  }
+}
+
+export async function getUsersCountController(req: Request, res: Response) {
+  try {
+    const count = await getUsersCountService();
+    return res.status(200).json({
+      success: true,
+      count: count,
+    });
+  } catch (error) {
+    console.error(error);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",

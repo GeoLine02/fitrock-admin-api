@@ -3,6 +3,7 @@ import {
   createProductService,
   deleteProductService,
   getProductByIdService,
+  getProductsCountService,
   getProductsService,
   updateProductService,
 } from "../services/product.service";
@@ -17,6 +18,16 @@ export async function getProductsController(req: Request, res: Response) {
     res.status(200).json({ products, totalRows });
   } catch (error) {
     console.error("Error in getProductsController:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function getProductsCountController(req: Request, res: Response) {
+  try {
+    const productsCount = await getProductsCountService();
+    res.status(200).json({ count: productsCount });
+  } catch (error) {
+    console.error("Error in getProductsCountController:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 }
