@@ -15,3 +15,13 @@ export async function getUserService(id: number) {
     throw error;
   }
 }
+
+export async function getUsersCountService() {
+  try {
+    const count = await Users.count();
+    return count;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
