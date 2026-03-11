@@ -9,6 +9,8 @@ import productRoutes from "./routes/product.routes";
 import authRoutes from "./routes/auth.routes";
 import authGuard from "./guards/authGuard";
 import userRoutes from "./routes/user.routes";
+import filtersRoutes from "./routes/filters.routes";
+import { initAssociations } from "./models/associations";
 
 dotenv.config();
 
@@ -35,6 +37,7 @@ app.use(cookieParser());
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/products", authGuard, productRoutes);
+app.use("/filters", authGuard, filtersRoutes);
 
 // =====================
 // 404 Handler (must come after routes)
@@ -55,6 +58,10 @@ const startServer = async () => {
   try {
     await sequelize.authenticate();
     console.log("✓ Database connection established");
+
+    // ✅ INIT ASSOCIATIONS HERE
+    initAssociations();
+    console.log("✓ Model associations initialized");
 
     await sequelize.sync({
       alter: process.env.NODE_ENV === "development",
