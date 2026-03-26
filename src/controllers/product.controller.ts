@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import {
   createProductService,
   deleteProductService,
+  getLowInStockProductsService,
   getProductByIdService,
   getProductsCountService,
   getProductsService,
@@ -19,6 +20,21 @@ export async function getProductsController(req: Request, res: Response) {
   } catch (error) {
     console.error("Error in getProductsController:", error);
     res.status(500).json({ error: "Internal Server Error" });
+  }
+}
+
+export async function getLowInStockProductsController(
+  req: Request,
+  res: Response,
+) {
+  try {
+    const lowInStockProducts = await getLowInStockProductsService();
+    return res.status(200).json({
+      products: lowInStockProducts,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 }
 

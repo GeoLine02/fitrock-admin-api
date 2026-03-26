@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { Products } from "../models/products";
 
 interface CreateProductData {
@@ -22,6 +23,25 @@ export async function getProductsService(page: number, limit: number) {
     return { products: products, totalRows: productsCount };
   } catch (error) {
     console.error("Error fetching products:", error);
+    throw error;
+  }
+}
+
+export async function getLowInStockProductsService() {
+  try {
+    const LOW_STOCK_LIMIT = 5; // change threshold if needed
+
+    const products = await Products.findAll({
+      where: {
+        product_quantity: {
+          [Op.lte]: LOW_STOCK_LIMIT,
+        },
+      },
+    });
+
+    return products;
+  } catch (error) {
+    console.error("Error fetching low stock products:", error);
     throw error;
   }
 }
